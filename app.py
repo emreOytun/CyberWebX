@@ -147,9 +147,22 @@ def generate_password():
     scraper_output = data['scraper_output']
 
     prompt = (
-        f"Using the following LinkedIn, Twitter, Instagram data, generate 500 strong, unique passwords, but add traditional user passwords like NAME123, most common password "
-        f"for the user. Only return the password list, one per line, no explanations or extra text.\n"
-        f"Input:\n{scraper_output}"
+     "You are a password generation expert. Based on the following scraped data from LinkedIn, Twitter, and Instagram, generate *500 unique and strong passwords* that are also memorable for the user.\n"
+
+     "- Include some traditional patterns.\n"
+
+     "- Incorporate personal but public details to make the passwords strong yet easy to remember.\n"
+
+     "- Avoid weak or common passwords unless they are personalized.\n"
+
+    "- Vary the format, use substitutions (like @ for a), camelCase, numbers, and symbols where suitable.\n"
+    "- Use at least one upper-lower case - numbers - special characters in %10.\n"
+    "- Also you can add some specific of user's name-surname personel information.\n"
+
+    "- Do *not* include any explanations, comments, or headers.\n"
+
+     "- Return only the passwords, one per line.\n\n"
+    f"Scraped Input:\n{scraper_output}"
     )
 
     try:
