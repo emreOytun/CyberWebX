@@ -174,6 +174,7 @@
             <button type="submit">Check</button>
           </div>
           <p id="urlResult" style="pointer-events: none; user-select: none"></p>
+          <p id="urlDetailResult" style="pointer-events: none; user-select: none"></p>
         </form>
       </div>
 
@@ -271,11 +272,16 @@
         try {
           const res = await fetch(url, inputData);
           const data = await res.json();
-          resultP.className =
-            data.result === "malicious" || data.result === "bad" || data.error
-              ? "error"
-              : "success";
-          resultP.innerText = data.result || data.password || data.error;
+          if(resultId === "urlResult"){
+            resultP.className =
+              data.result === "malicious" || data.result === "bad" || data.error
+                ? "error"
+                : "success";
+            resultP.innerText = data.result || data.password || data.error;
+          }else{
+            resultP.innerText = data.urlDetailResult;
+          }
+          
         } catch (err) {
           resultP.className = "error";
           resultP.innerText = "An error occurred.";
@@ -293,6 +299,11 @@
         const button = document.querySelector("#urlForm button");
         button.disabled = true;
         handleForm("urlForm", payload, "/check-url", "urlResult").finally(
+          () => {
+            button.disabled = false;
+          }
+        );
+        handleForm("urlForm", payload, "/check-url", "urlDetailResult").finally(
           () => {
             button.disabled = false;
           }

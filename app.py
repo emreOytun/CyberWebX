@@ -60,8 +60,7 @@ def check_url():
         return jsonify({'error': 'Model prediction failed', 'details': str(e)}), 500
 
     response_data = {'url': url, 'result': result}
-
-    if result == 'malicious':
+    if result == 'bad':
         prompt = (
             f"This URL has been detected as malicious: {url}. "
             f"Please explain in 3 clear sentences why this kind of domain is considered dangerous, "
@@ -85,9 +84,9 @@ def check_url():
             )
             gemini_response.raise_for_status()
             gemini_data = gemini_response.json()
-
-            explanation = gemini_data['candidates'][0]['content']['parts'][0]['text'].strip()
-            response_data['explanation'] = explanation
+            explanation = gemini_data['candidates'][0]['content']['parts'][0]['text']
+            response_data['urlDetailResult'] = explanation
+            print(explanation)
 
         except Exception as e:
             return jsonify({'error': 'Gemini API failed', 'details': str(e)}), 500
