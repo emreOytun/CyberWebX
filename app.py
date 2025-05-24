@@ -1,3 +1,7 @@
+import sys
+import app
+sys.modules['__main__'] = app
+
 from flask import Flask, request, jsonify, render_template
 import joblib
 import os

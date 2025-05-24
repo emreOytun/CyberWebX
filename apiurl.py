@@ -1,3 +1,6 @@
+import apiurl
+import sys
+sys.modules['__main__'] = apiurl
 from flask import Flask, request, jsonify
 import joblib
 import os
