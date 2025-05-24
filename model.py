@@ -5,14 +5,19 @@ import numpy as np
 
 class MalwareModel:
     def __init__(self, model_path: str, scaler_path: str):
-        self.model = pickle.load(open(model_path, 'rb'))
-        self.scaler = pickle.load(open(scaler_path, 'rb'))
+        # Model ve selector'ı yükle
+        self.classifier = pickle.load(open(model_path, 'rb'))    # RandomForestClassifier
+        self.selector = pickle.load(open(scaler_path, 'rb'))   # SelectFromModel
 
     def predict_from_features(self, features, columns):
-        df = pd.DataFrame([features], columns=columns)
-        df["legitimate"] = 0  # dummy label
-        X = df.drop(["Name", "md5", "legitimate"], axis=1)
-        X_scaled = self.scaler.transform(X)
-        prediction = self.model.predict(X_scaled)[0]
-        label = "malicious" if prediction == 0 else "legitimate"
-        return label
+        # Name ve md5 hariç, sadece modelin eğitildiği özellikleri al
+        feature_values = np.array([features[2:]])  # 2D array
+        
+        # Özellik seçimi (SelectFromModel)
+        selected_features = self.selector.transform(feature_values)
+        
+        # Model tahmini
+        prediction = self.classifier.predict(selected_features)[0]
+
+        # Sonucu etiketle
+        return "legitimate" if str(prediction) == str(1) else "malicious"

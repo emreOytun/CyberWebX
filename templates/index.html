@@ -278,6 +278,12 @@
                 ? "error"
                 : "success";
             resultP.innerText = data.result || data.password || data.error;
+          }else if(resultId === "fileResult"){
+              resultP.className =
+              data.result === "malicious" || data.result === "bad" || data.error
+                ? "error"
+                : "success";
+              resultP.innerText = data.result || data.password || data.error;
           }else{
             resultP.innerText = data.urlDetailResult;
           }

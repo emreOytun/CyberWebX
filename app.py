@@ -116,7 +116,6 @@ def scan_file():
     file_id = str(uuid.uuid4())
     file_path = os.path.join(UPLOAD_DIR, f"{file_id}_{uploaded_file.filename}")
     uploaded_file.save(file_path)
-
     try:
         if system == 'windows':
             result = scan_pe_file_windows(file_path, malware_model)
@@ -124,7 +123,6 @@ def scan_file():
             result = scan_pe_file_linux(file_path, malware_model)
         else:
             return jsonify({'error': f'Unsupported OS: {system}'}), 500
-
         return jsonify(result)
 
     except Exception as e:
