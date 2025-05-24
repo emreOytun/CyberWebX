@@ -52,14 +52,47 @@ def check_url():
 
     # Bypass whitelist
     if url in WHITELIST:
-        result = 'good'
-    else:
-        try:
-            result = url_model.predict([url])[0]
-        except Exception as e:
-            return jsonify({'error': 'Model prediction failed', 'details': str(e)}), 500
+        return jsonify({'url': url, 'result': 'good'})
 
-    return jsonify({'url': url, 'result': result})
+    try:
+        result = url_model.predict([url])[0]
+    except Exception as e:
+        return jsonify({'error': 'Model prediction failed', 'details': str(e)}), 500
+
+    response_data = {'url': url, 'result': result}
+
+    if result == 'malicious':
+        prompt = (
+            f"This URL has been detected as malicious: {url}. "
+            f"Please explain in 3 clear sentences why this kind of domain is considered dangerous, "
+            f"based on general cybersecurity principles (such as phishing, malware, typosquatting, spam). "
+            f"Do not include any extra commentary, just the explanation."
+        )
+
+        try:
+            gemini_response = requests.post(
+                f"{GEMINI_API_URL}?key={GEMINI_API_KEY}",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "contents": [
+                        {
+                            "parts": [
+                                {"text": prompt}
+                            ]
+                        }
+                    ]
+                }
+            )
+            gemini_response.raise_for_status()
+            gemini_data = gemini_response.json()
+
+            explanation = gemini_data['candidates'][0]['content']['parts'][0]['text'].strip()
+            response_data['explanation'] = explanation
+
+        except Exception as e:
+            return jsonify({'error': 'Gemini API failed', 'details': str(e)}), 500
+
+    return jsonify(response_data)
 
 
 # === File Scanner Setup ===
