@@ -1,65 +1,185 @@
-# CyberWebX
 
-CyberWebX is a modular web-based cybersecurity platform combining machine learning and OSINT techniques to detect and mitigate digital threats. It includes:
+# CyberWebX 🚀
 
-✅ Malware detection (PE file analysis)  
-✅ Domain trust evaluation (phishing URL detection)  
-✅ OSINT-based password generation
+**An Intelligent Cybersecurity Platform Using Machine Learning and OSINT**  
+Modular platform combining malware detection, phishing URL classification, and secure password generation enhanced by scraping + LLM.
 
----
-
-## 🚀 Features
-
-- **Malware File Detection**
-  - Static analysis of Windows PE files
-  - Random Forest classifier with 95.8% accuracy
-
-- **Domain Trust Detection**
-  - URL lexical feature analysis using Logistic Regression
-  - TF-IDF vectorization for efficient text processing
-
-- **OSINT-Based Password Generator**
-  - Collects public footprint data (LinkedIn, Twitter, Instagram)
-  - Locally hosted LLM for strong, personalized password suggestions
+![CyberWebX Banner](https://github.com/Mens1s/CyberWebX/raw/main/assets/banner.png)
 
 ---
 
-## 🏗️ Tech Stack
+## 📺 Demo Video
 
-| Layer       | Technology                                     |
-|-------------|-----------------------------------------------|
-| Frontend    | HTML, CSS, JavaScript (Vanilla JS)            |
-| Backend     | Python Flask, Scikit-learn, Joblib            |
-| Machine Learning | Random Forest, Logistic Regression, TF-IDF |
-| Utilities   | Requests, BeautifulSoup, Tkinter, Selenium, Instaloader |
+▶ **Watch the demo:**  
+[![CyberWebX Demo](https://img.youtube.com/vi/vsUeiiuE0kg/0.jpg)](https://www.youtube.com/watch?v=vsUeiiuE0kg)
 
 ---
 
-## 📊 Datasets Used
+## 📸 Screenshots
 
-- **Malware Dataset:** 10,000 PE files (50% benign, 50% malicious) → [Kaggle Source](https://www.kaggle.com/datasets/dscclass/malware)
-- **URL Dataset:** 84,093 domains (benign + phishing) → [Kaggle Source](https://www.kaggle.com/datasets/samahsadiq/benign-and-malicious-urls)
+| Web Dashboard (Domain Check) | File Upload Scanner |
+|-----------------------------|---------------------|
+| ![Domain Check](https://github.com/Mens1s/CyberWebX/raw/main/assets/domain_check.png) | ![File Scanner](https://github.com/Mens1s/CyberWebX/raw/main/assets/file_scan.png) |
+
+| Password Generator | Local Tkinter Scraper |
+|--------------------|-----------------------|
+| ![Password Generator](https://github.com/Mens1s/CyberWebX/raw/main/assets/password_generator.png) | ![Tkinter Scraper](https://github.com/Mens1s/CyberWebX/raw/main/assets/scraper.png) |
+
+---
+
+## 🌟 Key Features
+
+✅ **Malware File Analysis** → Static PE header analysis using Random Forest  
+✅ **Phishing Domain Classification** → Lexical + TF-IDF + Logistic Regression  
+✅ **OSINT-Based Password Generation** → Uses scraped footprint + Gemini API + LLM  
+✅ **Modular Flask REST API** → Extensible, separate endpoints  
+✅ **Standalone Tkinter Scraper GUI** → Local scraping, no cloud exposure
+
+---
+
+## 🏛️ Architecture
+
+```
+Frontend (HTML, CSS, JS)  →  Flask Backend (REST API)  →  ML Models (Scikit-learn)
+                                    ↓
+                          Tkinter Local GUI (Scraper)
+```
+
+---
+
+## 💾 Datasets
+
+- Malware PE Header Dataset → [Kaggle Link](https://www.kaggle.com/datasets/dscclass/malware)
+- Malicious & Benign URLs → [Kaggle Link](https://www.kaggle.com/datasets/samahsadiq/benign-and-malicious-urls)
+
+---
+
+## 🔍 Example Code Snippets
+
+### 📦 Malware Detection Model
+
+```python
+df = pd.read_csv("MalwareData.csv", sep="|")
+X = df.drop(["Name", "md5", "legitimate"], axis=1).values
+y = df["legitimate"].values
+
+extratrees = ExtraTreesClassifier().fit(X, y)
+selector = SelectFromModel(extratrees, prefit=True)
+X_selected = selector.transform(X)
+
+clf = RandomForestClassifier(n_estimators=50)
+clf.fit(X_train, y_train)
+```
+
+### 🌐 URL Classifier Model
+
+```python
+def sanitization(web):
+    web = web.lower()
+    tokens = set(web.replace('/', '.').replace('-', '.').split('.'))
+    tokens.discard('com')
+    return list(tokens)
+
+pipeline = Pipeline([
+    ('vectorizer', TfidfVectorizer(tokenizer=sanitization)),
+    ('classifier', LogisticRegression(solver='lbfgs', max_iter=1000))
+])
+pipeline.fit(x_train, y_train)
+```
+
+### 🌍 Flask Endpoint (Check URL)
+
+```python
+@app.route('/check-url', methods=['POST'])
+def check_url():
+    url = request.get_json()['url'].strip().lower()
+    if url in WHITELIST:
+        return jsonify({'url': url, 'result': 'good'})
+    result = url_model.predict([url])[0]
+    return jsonify({'url': url, 'result': result})
+```
+
+### 🔐 Password Generation Prompt
+
+```python
+prompt = (
+    "You are a password generation expert. Generate 500 unique, strong, and memorable passwords "
+    "based on scraped user data. Avoid common patterns, use substitutions, camelCase, symbols."
+)
+response = requests.post(GEMINI_API_URL, headers=HEADERS, json=payload)
+```
 
 ---
 
 ## ⚙️ Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Mens1s/CyberWebX.git
-
-# Navigate to the project directory
 cd CyberWebX
 
-# (Optional) Create a virtual environment
+# (Optional) Virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
+python app.py  # Start Flask backend
 
-# Run Flask backend
-python app.py
-
-# For the local Tkinter GUI
+# Run local scraper (GUI)
 python guimain.py
+```
+
+---
+
+## 🌐 API Endpoints
+
+| Route                  | Method | Description                                |
+|------------------------|--------|------------------------------------------|
+| `/`                   | GET    | Main dashboard view                      |
+| `/check-url`          | POST   | Submit a URL for phishing check          |
+| `/scan-file`          | POST   | Upload PE file for malware scanning      |
+| `/generate-password`  | POST   | Generate passwords from OSINT footprint  |
+
+---
+
+## 📈 Performance
+
+| Module                   | Accuracy  | Precision | Recall  |
+|--------------------------|-----------|-----------|---------|
+| Malware Detection        | 95.8%     | 94.6%     | 93.2%  |
+| Phishing URL Detection   | 98.57%    | 98.11%    | 99.60% |
+
+---
+
+## 🔒 Security Considerations
+
+✅ No cloud scraping (Tkinter runs locally)  
+✅ Whitelisted domains bypass false positives  
+✅ Gemini API securely integrated via backend  
+✅ Password generation follows strong entropy rules  
+✅ Designed for research & educational purposes
+
+---
+
+## 🔧 Future Work
+
+- Dynamic malware sandbox integration  
+- WHOIS and DNSBL-based domain enrichment  
+- JWT + role-based access control  
+- Mobile/desktop cross-platform expansion  
+- Real-time notification system
+
+---
+
+## 👥 Contributors
+
+- Ahmet Yiğit → a.yigit2020@gtu.edu.tr  
+- Emre Oytun  
+- Elif Deniz
+
+---
+
+## 🌍 Project Link
+
+🔗 https://github.com/Mens1s/CyberWebX
+
+> ✨ **Note:** If you use or modify this project, please cite the original authors or leave a GitHub star ⭐
