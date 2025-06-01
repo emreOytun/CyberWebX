@@ -4,7 +4,6 @@
 **An Intelligent Cybersecurity Platform Using Machine Learning and OSINT**  
 Modular platform combining malware detection, phishing URL classification, and secure password generation enhanced by scraping + LLM.
 
-![CyberWebX Banner](https://github.com/Mens1s/CyberWebX/raw/main/assets/banner.png)
 
 ---
 
@@ -19,7 +18,7 @@ Modular platform combining malware detection, phishing URL classification, and s
 
 | Web Dashboard (Domain Check) | File Upload Scanner |
 |-----------------------------|---------------------|
-| ![Domain Check](https://github.com/Mens1s/CyberWebX/raw/main/assets/domain_check.png) | ![File Scanner](https://github.com/Mens1s/CyberWebX/raw/main/assets/file_scan.png) |
+| ![Domain Check](https://github.com/Mens1s/CyberWebX/raw/main/assets/domain_check.png) | ![File Scanner](https://github.com/Mens1s/CyberWebX/raw/main/assets//file_scan.png) |
 
 | Password Generator | Local Tkinter Scraper |
 |--------------------|-----------------------|
