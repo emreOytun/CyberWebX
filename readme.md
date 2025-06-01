@@ -18,11 +18,11 @@ Modular platform combining malware detection, phishing URL classification, and s
 
 | Web Dashboard (Domain Check) | File Upload Scanner |
 |-----------------------------|---------------------|
-| ![Domain Check](https://github.com/Mens1s/CyberWebX/raw/main/assets/domain_check.png) | ![File Scanner](https://github.com/Mens1s/CyberWebX/raw/main/assets//file_scan.png) |
+| ![Domain Check](https://raw.githubusercontent.com/Mens1s/CyberWebX/refs/heads/main/raw/main/assets/domain_check.png) | ![File Scanner](https://raw.githubusercontent.com/Mens1s/CyberWebX/refs/heads/main/raw/main/assets/file_scan.png) |
 
 | Password Generator | Local Tkinter Scraper |
 |--------------------|-----------------------|
-| ![Password Generator](https://github.com/Mens1s/CyberWebX/raw/main/assets/password_generator.png) | ![Tkinter Scraper](https://github.com/Mens1s/CyberWebX/raw/main/assets/scraper.png) |
+| ![Password Generator](https://raw.githubusercontent.com/Mens1s/CyberWebX/refs/heads/main/raw/main/assets/password_generator.png) | ![Tkinter Scraper](https://raw.githubusercontent.com/Mens1s/CyberWebX/refs/heads/main/raw/main/assets/scraper.png) |
 
 ---
 
