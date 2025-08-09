@@ -177,8 +177,4 @@ python guimain.py
 
 ---
 
-## 🌍 Project Link
-
-🔗 https://github.com/Mens1s/CyberWebX
-
 > ✨ **Note:** If you use or modify this project, please cite the original authors or leave a GitHub star ⭐
